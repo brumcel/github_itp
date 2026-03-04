@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 app.secret_key = urandom(24)
 
-# Set the folder where images are stored
+# Set the folder where images are stored - Extra tekst toegevoegd
 # Use /pictures for production (container), uploads for local dev
 app.config["UPLOAD_FOLDER"] = os.getenv("PICTURES_DIR", "uploads")
 
