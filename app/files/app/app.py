@@ -1,7 +1,6 @@
 # Import relevant libraries and modules
 from flask import (
     Flask,
-    sys,
     render_template,
     request,
     redirect,
@@ -9,6 +8,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 import os
+import sys
 from os.path import join, splitext, exists, getmtime
 from os import urandom, listdir
 
@@ -111,6 +111,30 @@ def download(imgname):
 @app.route("/static/<name>")
 def get_static(name):
     return send_from_directory("static", name)
+
+
+# Define route to delete an image
+@app.route("/delete/<imgname>", methods=["POST"])
+def delete_image(imgname):
+    """
+    Delete an image from the filesystem.
+    Redirects to home page after deletion.
+    """
+    # Sanitize filename to prevent path traversal attacks
+    fname = secure_filename(imgname)
+    file_path = join(app.config["UPLOAD_FOLDER"], fname)
+
+    # Delete file from filesystem if it exists
+    try:
+        if exists(file_path):
+            os.remove(file_path)
+            print(f"Deleted: {fname}", file=sys.stdout)
+        else:
+            print(f"File not found: {fname}", file=sys.stderr)
+    except OSError as err:
+        print(f"Filesystem error: {err}", file=sys.stderr)
+    return redirect("/")
+
 
 # To keep the application running
 if __name__ == "__main__":
