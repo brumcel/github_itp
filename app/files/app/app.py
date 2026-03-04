@@ -1,7 +1,6 @@
 # Import relevant libraries and modules
 from flask import (
     Flask,
-    sys,
     render_template,
     request,
     redirect,
@@ -9,6 +8,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 import os
+import sys
 from os.path import join, splitext, exists, getmtime
 from os import urandom, listdir
 
